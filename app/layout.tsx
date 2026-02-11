@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,9 +28,16 @@ export default function RootLayout({
       <body>
         {/* ここから追加 */}
         <header className="bg-blue-600 text-white p-4">
-          <h1 className="text-2xl">ヘッダー</h1>
+          <nav className="flex gap-6 items-center">
+            <h1 className="text-2xl font-bold">mdot-next: 練習サイト</h1>
+            <Link href="/" className="hover:underline">
+              ホーム
+            </Link>
+            <Link href="/about" className="hover:underline">
+              About
+            </Link>
+          </nav>
         </header>
-
         <main className="min-h-screen p-12">{children}</main>
 
         <footer className="bg-gray-500 text-white p-4 text-center">

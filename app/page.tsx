@@ -1,4 +1,5 @@
 // app/page.tsx
+import Button from "./components/Button";
 export default function Home() {
   return (
     <div className="max-w-4xl mx-auto">
@@ -12,6 +13,11 @@ export default function Home() {
           <li>コンポーネントの作成</li>
           <li>ページ間のリンク</li>
         </ul>
+      </div>
+      {/* ここにボタンを追加 */}
+      <div className="space-x-10">
+        <Button text="クリックしてね" />
+        <Button text="もう一つのボタン" />
       </div>
     </div>
   );
