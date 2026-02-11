@@ -11,6 +11,9 @@ export default function Header() {
         <Link href="/about" className="hover:underline">
           About
         </Link>
+        <Link href="/concerts" className="hover:underline">
+          演奏会情報
+        </Link>
       </nav>
     </header>
   );
