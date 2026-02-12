@@ -2,8 +2,10 @@ import Button from "./components/Button";
 import Card from "./components/Card";
 import { client, News } from "./lib/microcms";
 
+// この行を追加（ファイルの先頭、importの後）
+export const revalidate = 0; // キャッシュを無効化して常に最新データを取得
+
 export default async function Home() {
-  // microCMSからお知らせを取得
   const data = await client.get({
     endpoint: "news",
     queries: { limit: 3 },
@@ -13,6 +15,7 @@ export default async function Home() {
 
   return (
     <div className="max-w-4xl mx-auto">
+      {/* 以下は変更なし */}
       <h1 className="text-4xl font-bold mb-6">ようこそ！</h1>
       <p className="text-lg mb-4">これはNext.jsの練習用サイトです。</p>
 
@@ -34,7 +37,7 @@ export default async function Home() {
           <li>レイアウトの作成 ✅</li>
           <li>コンポーネントの作成 ✅</li>
           <li>ページ間のリンク ✅</li>
-          <li>microCMS連携 🔄</li>
+          <li>microCMS連携 ✅</li>
         </ul>
       </div>
 
