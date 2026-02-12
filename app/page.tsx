@@ -1,7 +1,16 @@
 import Button from "./components/Button";
 import Card from "./components/Card";
+import { client, News } from "./lib/microcms";
 
-export default function Home() {
+export default async function Home() {
+  // microCMSからお知らせを取得
+  const data = await client.get({
+    endpoint: "news",
+    queries: { limit: 3 },
+  });
+
+  const newsList: News[] = data.contents;
+
   return (
     <div className="max-w-4xl mx-auto">
       <h1 className="text-4xl font-bold mb-6">ようこそ！</h1>
@@ -9,21 +18,14 @@ export default function Home() {
 
       <h2 className="text-2xl font-semibold mb-4 mt-8">お知らせ</h2>
       <div className="grid gap-4 mb-6">
-        <Card
-          title="第10回定期演奏会のお知らせ"
-          date="2026年3月15日"
-          description="ベートーヴェン交響曲第9番を演奏します。"
-        />
-        <Card
-          title="団員募集中"
-          date="2026年2月1日"
-          description="バイオリン、ビオラ、チェロのパートで団員を募集しています。"
-        />
-        <Card
-          title="練習日程変更"
-          date="2026年1月20日"
-          description="2月の練習は第2・4土曜日に変更になります。"
-        />
+        {newsList.map((news) => (
+          <Card
+            key={news.id}
+            title={news.title}
+            date={news.date}
+            description={news.content}
+          />
+        ))}
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-md mb-6">
@@ -32,6 +34,7 @@ export default function Home() {
           <li>レイアウトの作成 ✅</li>
           <li>コンポーネントの作成 ✅</li>
           <li>ページ間のリンク ✅</li>
+          <li>microCMS連携 🔄</li>
         </ul>
       </div>
 
