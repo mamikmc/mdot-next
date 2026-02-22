@@ -5,9 +5,16 @@ export const client = createClient({
   apiKey: process.env.MICROCMS_API_KEY || "",
 });
 
-export type News = {
+export type Post = {
   id: string;
   title: string;
   date: string;
   content: string;
 };
+
+export async function getPostDetail(id: string): Promise<Post> {
+  return client.get({
+    endpoint: "posts",
+    contentId: id,
+  });
+}
