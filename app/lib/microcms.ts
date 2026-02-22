@@ -10,6 +10,7 @@ export type Post = {
   title: string;
   date: string;
   content: string;
+  category?: string; // ← 追加
 };
 
 export async function getPostDetail(id: string): Promise<Post> {
