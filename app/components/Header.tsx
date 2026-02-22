@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import MStarLogo from "./MStarLogo";
-import Navigation from "./Navigation";
+import Navigation, { NavItem } from "./Navigation";
 import { designConfig } from "@/app/config/design";
 
 const navItems: NavItem[] = [
