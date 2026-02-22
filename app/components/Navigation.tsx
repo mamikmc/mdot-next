@@ -21,11 +21,11 @@ export default function Navigation({
 }: NavigationProps) {
   const pathname = usePathname();
 
-  // items が渡されなかった場合のデフォルト
   const navItems = items || [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
-    { href: "/concerts", label: "Concerts" },
+    { href: "/category/concert", label: "Concerts" },
+    { href: "/category/handmade", label: "Handmade" },
   ];
 
   return (
@@ -35,7 +35,11 @@ export default function Navigation({
           key={item.href}
           href={item.href}
           className={
-            pathname === item.href || pathname.startsWith(item.href)
+            item.href === "/"
+              ? pathname === "/"
+                ? "text-sky-600 font-bold"
+                : ""
+              : pathname.startsWith(item.href)
               ? "text-sky-600 font-bold"
               : ""
           }

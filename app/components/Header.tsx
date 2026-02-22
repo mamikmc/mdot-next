@@ -8,7 +8,7 @@ import { designConfig } from "@/app/config/design";
 
 const navItems: NavItem[] = [
   { href: "/about", label: "About" },
-  { href: "/concerts", label: "Concerts" },
+  { href: "/category/concert", label: "Concerts" },
   { href: "/learning", label: "Learning" },
 ];
 
