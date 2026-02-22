@@ -38,10 +38,10 @@ export default function Navigation({
             item.href === "/"
               ? pathname === "/"
                 ? "text-sky-600 font-bold"
-                : ""
+                : "transition-colors duration-200 hover:text-sky-600"
               : pathname.startsWith(item.href)
               ? "text-sky-600 font-bold"
-              : ""
+              : "transition-colors duration-200 hover:text-sky-600"
           }
           onClick={onNavigate}
         >
