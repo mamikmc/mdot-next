@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import MStarLogo from "./MStarLogo";
 import Navigation from "./Navigation";
+import { CategoryTag } from "./CategoryTag";
 import { designConfig } from "@/app/config/design";
+import { CATEGORIES } from "@/app/lib/categories";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -34,12 +36,12 @@ export default function Header() {
           <span className="ml-3 text-xl font-medium text-gray-900">mdot</span>
         </Link>
 
-        {/* PCナビ */}
+        {/* PCナビ（md以上で表示） */}
         <div className="hidden md:block">
           <Navigation />
         </div>
 
-        {/* モバイル：ハンバーガー */}
+        {/* モバイル：ハンバーガー（md未満で表示） */}
         <button
           type="button"
           className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-400"
@@ -48,19 +50,39 @@ export default function Header() {
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >
-          {/* いちばん簡単なアイコン */}
           <span className="text-2xl leading-none">{open ? "×" : "☰"}</span>
         </button>
       </div>
 
-      {/* モバイルメニュー（超基本：下に展開） */}
+      {/* モバイルメニュー */}
       {open && (
-        <div className="md:hidden border-t border-neutral-200 relative z-50">
-          <div className="px-5 py-6">
+        <div
+          id="mobile-menu"
+          className="md:hidden border-t border-neutral-200 bg-white relative z-50"
+        >
+          <div className="px-5 py-6 flex flex-col gap-8">
+            {/* ナビゲーション */}
             <Navigation
               onNavigate={() => setOpen(false)}
-              className="flex flex-col gap-6"
+              className="flex flex-col gap-4"
             />
+
+            {/* カテゴリー一覧 */}
+            <div>
+              <p className="text-xs font-mono tracking-widest uppercase text-gray-400 mb-3">
+                Categories
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {CATEGORIES.map((cat) => (
+                  <CategoryTag
+                    key={cat}
+                    label={cat}
+                    href={`/category/${cat}`}
+                    onClick={() => setOpen(false)}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       )}
