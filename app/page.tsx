@@ -4,6 +4,8 @@ import { client, Post } from "./lib/microcms";
 
 export const revalidate = 0;
 
+const PER_PAGE = 10;
+
 // HTMLからテキストだけ抽出
 function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "");
@@ -15,13 +17,27 @@ function extractFirstImage(html: string): string | null {
   return match ? match[1] : null;
 }
 
-export default async function Home() {
+type Props = {
+  searchParams: Promise<{ page?: string }>;
+};
+
+export default async function Home({ searchParams }: Props) {
+  const { page } = await searchParams;
+  const currentPage = Number(page) || 1;
+  const offset = (currentPage - 1) * PER_PAGE;
+
   const data = await client.get({
     endpoint: "posts",
-    queries: { limit: 3 },
+    queries: {
+      limit: PER_PAGE,
+      offset,
+      orders: "-date", // 新しい順
+    },
   });
 
   const postsList: Post[] = data.contents;
+  const totalCount: number = data.totalCount;
+  const totalPages = Math.ceil(totalCount / PER_PAGE);
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
@@ -58,6 +74,54 @@ export default async function Home() {
             </Link>
           ))}
         </div>
+
+        {/* ページネーション */}
+        {totalPages > 1 && (
+          <nav
+            aria-label="ページネーション"
+            className="flex justify-center items-center gap-2 mt-8"
+          >
+            {/* 前へ */}
+            {currentPage > 1 ? (
+              <Link
+                href={`/?page=${currentPage - 1}`}
+                className="px-3 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                ← 前へ
+              </Link>
+            ) : (
+              <span className="px-3 py-2 text-sm text-gray-300">← 前へ</span>
+            )}
+
+            {/* ページ番号 */}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <Link
+                key={p}
+                href={`/?page=${p}`}
+                className={[
+                  "w-9 h-9 flex items-center justify-center rounded-full text-sm transition-colors",
+                  p === currentPage
+                    ? "bg-gray-900 text-white font-bold"
+                    : "text-gray-600 hover:bg-gray-100",
+                ].join(" ")}
+              >
+                {p}
+              </Link>
+            ))}
+
+            {/* 次へ */}
+            {currentPage < totalPages ? (
+              <Link
+                href={`/?page=${currentPage + 1}`}
+                className="px-3 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                次へ →
+              </Link>
+            ) : (
+              <span className="px-3 py-2 text-sm text-gray-300">次へ →</span>
+            )}
+          </nav>
+        )}
       </section>
     </div>
   );
