@@ -1,6 +1,6 @@
 // components/CategoryTag.tsx
 import Link from "next/link";
-import { CATEGORIES } from "@/app/lib/categories";
+import type { Category } from "@/app/lib/categories";
 
 // ─── 型定義 ───────────────────────────────────────────
 export interface CategoryTagProps {
