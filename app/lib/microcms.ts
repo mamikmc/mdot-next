@@ -1,4 +1,6 @@
 import { createClient } from "microcms-js-sdk";
+import type { Category } from "./categories";
+export type { Category };
 
 export const client = createClient({
   serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN || "",

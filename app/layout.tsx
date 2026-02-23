@@ -4,8 +4,7 @@ import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Zen_Kaku_Gothic_New } from "next/font/google";
-import Link from "next/link";
-import { CATEGORIES } from "@/app/lib/microcms";
+import { CATEGORIES } from "@/app/lib/categories";
 import { CategoryTag } from "@/app/components/CategoryTag";
 
 const zenKaku = Zen_Kaku_Gothic_New({
@@ -32,8 +31,8 @@ export default function RootLayout({
 
         {/* ─── 3カラムレイアウト ─── */}
         <div className="flex" style={{ height: "calc(100dvh - 90px)" }}>
-          {/* 左サイドバー：カテゴリー一覧 */}
-          <aside className="hidden lg:flex flex-col w-56 shrink-0 border-r border-gray-200 bg-white overflow-y-auto">
+          {/* 左サイドバー：カテゴリー一覧（md以上で表示） */}
+          <aside className="hidden md:flex flex-col w-56 shrink-0 border-r border-gray-200 bg-white overflow-y-auto">
             <div className="p-5">
               <p className="text-xs font-mono tracking-widest uppercase text-gray-400 mb-4">
                 Categories
@@ -53,8 +52,8 @@ export default function RootLayout({
           {/* 中央：メインコンテンツ */}
           <main className="flex-1 overflow-y-auto">{children}</main>
 
-          {/* 右サイドバー：Instagram（後で実装） */}
-          <aside className="hidden lg:flex flex-col w-64 shrink-0 border-l border-gray-200 bg-white overflow-y-auto">
+          {/* 右サイドバー：Instagram（md以上で表示） */}
+          <aside className="hidden md:flex flex-col w-64 shrink-0 border-l border-gray-200 bg-white overflow-y-auto">
             <div className="p-5">
               <p className="text-xs font-mono tracking-widest uppercase text-gray-400 mb-4">
                 Instagram

@@ -1,11 +1,12 @@
 // components/CategoryTag.tsx
 import Link from "next/link";
-import type { Category } from "@/app/lib/microcms"; // ← microcms.tsから型を参照
+import { CATEGORIES } from "@/app/lib/categories";
 
 // ─── 型定義 ───────────────────────────────────────────
 export interface CategoryTagProps {
   label: string;
   href?: string;
+  onClick?: () => void;
 }
 
 export interface CategoryTagListProps {
@@ -102,7 +103,7 @@ const FALLBACK = {
 };
 
 // ─── CategoryTag ──────────────────────────────────────
-export function CategoryTag({ label, href }: CategoryTagProps) {
+export function CategoryTag({ label, href, onClick }: CategoryTagProps) {
   const c = CATEGORY_COLOR_MAP[label as Category] ?? FALLBACK;
 
   const className = [
@@ -125,13 +126,17 @@ export function CategoryTag({ label, href }: CategoryTagProps) {
 
   if (href) {
     return (
-      <Link href={href} className={className}>
+      <Link href={href} className={className} onClick={onClick}>
         {inner}
       </Link>
     );
   }
 
-  return <span className={className}>{inner}</span>;
+  return (
+    <span className={className} onClick={onClick}>
+      {inner}
+    </span>
+  );
 }
 
 // ─── CategoryTagList ──────────────────────────────────
