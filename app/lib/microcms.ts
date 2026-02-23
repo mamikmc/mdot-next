@@ -10,7 +10,7 @@ export type Post = {
   title: string;
   date: string;
   content: string;
-  category?: string; // ← 追加
+  category?: string[];
 };
 
 export async function getPostDetail(id: string): Promise<Post> {
@@ -19,3 +19,19 @@ export async function getPostDetail(id: string): Promise<Post> {
     contentId: id,
   });
 }
+export const CATEGORIES = [
+  "event",
+  "interior",
+  "garden",
+  "cafe",
+  "bakery",
+  "food",
+  "camera",
+  "music",
+  "handmade",
+  "pet",
+  "shop",
+  "news",
+] as const;
+
+export type Category = (typeof CATEGORIES)[number];
