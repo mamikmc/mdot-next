@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getPostDetail } from "@/app/lib/microcms";
 import RichText from "@/app/components/RichText";
+import { CategoryTag, CategoryTagList } from "@/app/components/CategoryTag"; // CategoryTagListを追加
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -27,6 +28,17 @@ export default async function PostDetailPage({ params }: Props) {
       <time className="text-sm text-gray-500 font-medium block mb-3">
         {formattedDate}
       </time>
+
+      {post.category && post.category.length > 0 && (
+        <div className="mb-4">
+          <CategoryTagList
+            tags={post.category.map((cat) => ({
+              label: cat,
+              href: `/category/${cat}`,
+            }))}
+          />
+        </div>
+      )}
       <h1 className="text-3xl font-bold mb-8 text-gray-900">{post.title}</h1>
       <RichText content={post.content} />
     </article>

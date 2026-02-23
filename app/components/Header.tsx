@@ -3,14 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import MStarLogo from "./MStarLogo";
-import Navigation, { NavItem } from "./Navigation";
+import Navigation from "./Navigation";
 import { designConfig } from "@/app/config/design";
-
-const navItems: NavItem[] = [
-  { href: "/about", label: "About" },
-  { href: "/category/concert", label: "Concerts" },
-  { href: "/learning", label: "Learning" },
-];
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -42,7 +36,7 @@ export default function Header() {
 
         {/* PCナビ */}
         <div className="hidden md:block">
-          <Navigation items={navItems} />
+          <Navigation />
         </div>
 
         {/* モバイル：ハンバーガー */}
@@ -60,12 +54,10 @@ export default function Header() {
       </div>
 
       {/* モバイルメニュー（超基本：下に展開） */}
-
       {open && (
-        <div className="md:hidden border-t border-neutral-200">
+        <div className="md:hidden border-t border-neutral-200 relative z-50">
           <div className="px-5 py-6">
             <Navigation
-              items={navItems}
               onNavigate={() => setOpen(false)}
               className="flex flex-col gap-6"
             />
