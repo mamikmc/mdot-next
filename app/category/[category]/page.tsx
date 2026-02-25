@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Card from "@/app/components/Card";
 import { client, Post } from "@/app/lib/microcms";
+import Pagination from "@/app/components/Pagination";
 
 const PER_PAGE = 10;
 
@@ -78,50 +79,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
       {/* ページネーション */}
       {totalPages > 1 && (
-        <nav
-          aria-label="ページネーション"
-          className="flex justify-center items-center gap-2 mt-8"
-        >
-          {/* 前へ */}
-          {currentPage > 1 ? (
-            <Link
-              href={`/category/${slug}?page=${currentPage - 1}`}
-              className="px-3 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              ← 前へ
-            </Link>
-          ) : (
-            <span className="px-3 py-2 text-sm text-gray-300">← 前へ</span>
-          )}
-
-          {/* ページ番号 */}
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <Link
-              key={p}
-              href={`/category/${slug}?page=${p}`}
-              className={[
-                "w-9 h-9 flex items-center justify-center rounded-full text-sm transition-colors",
-                p === currentPage
-                  ? "bg-gray-900 text-white font-bold"
-                  : "text-gray-600 hover:bg-gray-100",
-              ].join(" ")}
-            >
-              {p}
-            </Link>
-          ))}
-
-          {/* 次へ */}
-          {currentPage < totalPages ? (
-            <Link
-              href={`/category/${slug}?page=${currentPage + 1}`}
-              className="px-3 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              次へ →
-            </Link>
-          ) : (
-            <span className="px-3 py-2 text-sm text-gray-300">次へ →</span>
-          )}
-        </nav>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          basePath={`/category/${category}`}
+        />
       )}
     </div>
   );
