@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Card from "./components/Card";
-import { client, Post } from "./lib/microcms";
+import { client, Post, Archive } from "./lib/microcms";
+import { HomeIcon } from "@heroicons/react/24/solid";
+import Pagination from "./components/Pagination";
 
 export const revalidate = 0;
 
@@ -17,6 +19,15 @@ function extractFirstImage(html: string): string | null {
   return match ? match[1] : null;
 }
 
+type UnifiedPost = {
+  id: string;
+  title: string;
+  date: string;
+  content: string;
+  category?: string[];
+  type: "post" | "archive";
+};
+
 type Props = {
   searchParams: Promise<{ page?: string }>;
 };
@@ -24,35 +35,62 @@ type Props = {
 export default async function Home({ searchParams }: Props) {
   const { page } = await searchParams;
   const currentPage = Number(page) || 1;
-  const offset = (currentPage - 1) * PER_PAGE;
 
-  const data = await client.get({
-    endpoint: "posts",
-    queries: {
-      limit: PER_PAGE,
-      offset,
-      orders: "-date", // 新しい順
-    },
-  });
+  // 全件取得（100件ずつ複数回リクエスト）
+  async function fetchAll(endpoint: string) {
+    const first = await client.get({
+      endpoint,
+      queries: { limit: 100, offset: 0, orders: "-date" },
+    });
+    const total = first.totalCount;
+    if (total <= 100) return first.contents;
 
-  const postsList: Post[] = data.contents;
-  const totalCount: number = data.totalCount;
+    const requests = [];
+    for (let offset = 100; offset < total; offset += 100) {
+      requests.push(
+        client.get({
+          endpoint,
+          queries: { limit: 100, offset, orders: "-date" },
+        })
+      );
+    }
+    const rest = await Promise.all(requests);
+    return [
+      ...first.contents,
+      ...rest.flatMap((r: { contents: unknown[] }) => r.contents),
+    ];
+  }
+
+  const [postsContents, archivesContents] = await Promise.all([
+    fetchAll("posts"),
+    fetchAll("archives"),
+  ]);
+
+  // マージして日付順にソート
+  const allPosts: UnifiedPost[] = [
+    ...postsContents.map((p: Post) => ({ ...p, type: "post" as const })),
+    ...archivesContents.map((a: Archive) => ({
+      ...a,
+      type: "archive" as const,
+    })),
+  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  const totalCount = allPosts.length;
   const totalPages = Math.ceil(totalCount / PER_PAGE);
+  const offset = (currentPage - 1) * PER_PAGE;
+  const postsList = allPosts.slice(offset, offset + PER_PAGE);
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
       <section aria-labelledby="welcome-heading">
         <h1
           id="welcome-heading"
-          className="text-6xl font-black mb-4
-          bg-gradient-to-r from-pink-800 to-blue-500
+          className="text-4xl font-black mb-4
+          bg-gradient-to-r from-rose-800 to-sky-500
           bg-clip-text text-transparent"
         >
-          ようこそ！
+          Welcome to mdot site!
         </h1>
-        <p className="text-lg mb-16 text-gray-700">
-          これはNext.jsの練習用サイトです。
-        </p>
       </section>
 
       <section aria-labelledby="posts-heading">
@@ -64,7 +102,14 @@ export default async function Home({ searchParams }: Props) {
         </h2>
         <div className="grid gap-6 mb-12">
           {postsList.map((post) => (
-            <Link key={post.id} href={`/posts/${post.id}`}>
+            <Link
+              key={`${post.type}-${post.id}`}
+              href={
+                post.type === "post"
+                  ? `/posts/${post.id}`
+                  : `/archives/${post.id}`
+              }
+            >
               <Card
                 title={post.title}
                 date={post.date}
@@ -77,50 +122,11 @@ export default async function Home({ searchParams }: Props) {
 
         {/* ページネーション */}
         {totalPages > 1 && (
-          <nav
-            aria-label="ページネーション"
-            className="flex justify-center items-center gap-2 mt-8"
-          >
-            {/* 前へ */}
-            {currentPage > 1 ? (
-              <Link
-                href={`/?page=${currentPage - 1}`}
-                className="px-3 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                ← 前へ
-              </Link>
-            ) : (
-              <span className="px-3 py-2 text-sm text-gray-300">← 前へ</span>
-            )}
-
-            {/* ページ番号 */}
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-              <Link
-                key={p}
-                href={`/?page=${p}`}
-                className={[
-                  "w-9 h-9 flex items-center justify-center rounded-full text-sm transition-colors",
-                  p === currentPage
-                    ? "bg-gray-900 text-white font-bold"
-                    : "text-gray-600 hover:bg-gray-100",
-                ].join(" ")}
-              >
-                {p}
-              </Link>
-            ))}
-
-            {/* 次へ */}
-            {currentPage < totalPages ? (
-              <Link
-                href={`/?page=${currentPage + 1}`}
-                className="px-3 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                次へ →
-              </Link>
-            ) : (
-              <span className="px-3 py-2 text-sm text-gray-300">次へ →</span>
-            )}
-          </nav>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            basePath="/"
+          />
         )}
       </section>
     </div>

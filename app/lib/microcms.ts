@@ -35,3 +35,17 @@ export const CATEGORIES = [
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];
+export type Archive = {
+  id: string;
+  title: string;
+  date: string;
+  content: string;
+  category?: string[];
+};
+
+export async function getArchiveDetail(id: string): Promise<Archive> {
+  return client.get({
+    endpoint: "archives",
+    contentId: id,
+  });
+}
