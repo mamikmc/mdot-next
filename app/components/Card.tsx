@@ -1,3 +1,5 @@
+import Image from "next/image"; // ← 追加
+
 export default function Card({
   title,
   date,

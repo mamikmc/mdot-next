@@ -26,6 +26,7 @@ type UnifiedPost = {
   content: string;
   category?: string[];
   type: "post" | "archive";
+  eyecatch?: { url: string; width: number; height: number }; // ← 追加
 };
 
 type Props = {
@@ -114,7 +115,9 @@ export default async function Home({ searchParams }: Props) {
                 title={post.title}
                 date={post.date}
                 description={stripHtml(post.content).slice(0, 80) + "…"}
-                thumbnail={extractFirstImage(post.content)}
+                thumbnail={
+                  post.eyecatch?.url ?? extractFirstImage(post.content) // ← 変更
+                }
               />
             </Link>
           ))}
