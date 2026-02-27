@@ -17,7 +17,7 @@ export default async function ArchiveDetailPage({ params }: Props) {
   });
 
   return (
-    <article className="max-w-3xl mx-auto px-6 py-12 pb-24">
+    <article className="max-w-3xl mx-auto px-6 py-12">
       <Link
         href="/"
         className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900 transition-colors mb-8"
@@ -50,6 +50,7 @@ export default async function ArchiveDetailPage({ params }: Props) {
     [&_p]:clear-none"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
+      <div className="clear-both" />
     </article>
   );
 }

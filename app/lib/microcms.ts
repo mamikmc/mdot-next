@@ -5,12 +5,22 @@ export const client = createClient({
   apiKey: process.env.MICROCMS_API_KEY || "",
 });
 
+// 画像型（追加）
+export type MicroCMSImage = {
+  url: string;
+  width: number;
+  height: number;
+};
+
+// Post型（eyecatch・images を追加、元の定義を置き換え）
 export type Post = {
   id: string;
   title: string;
   date: string;
   content: string;
   category?: string[];
+  eyecatch?: MicroCMSImage;
+  images?: MicroCMSImage[];
 };
 
 export async function getPostDetail(id: string): Promise<Post> {
@@ -19,6 +29,7 @@ export async function getPostDetail(id: string): Promise<Post> {
     contentId: id,
   });
 }
+
 export const CATEGORIES = [
   "event",
   "interior",
@@ -35,6 +46,8 @@ export const CATEGORIES = [
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];
+
+// Archiveはそのまま
 export type Archive = {
   id: string;
   title: string;
