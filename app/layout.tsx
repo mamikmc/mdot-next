@@ -8,6 +8,7 @@ import { Zen_Kaku_Gothic_New } from "next/font/google";
 import { CATEGORIES } from "@/app/lib/categories";
 import { CategoryTag } from "@/app/components/CategoryTag";
 import Calendar from "@/app/components/Calendar";
+import { getSeasonTheme } from "@/app/lib/season";
 
 const zenKaku = Zen_Kaku_Gothic_New({
   weight: ["400", "500", "700"],
@@ -27,10 +28,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const instagramPosts = await getInstagramPosts();
-
+  const season = getSeasonTheme();
   return (
     <html lang="ja" className={zenKaku.variable}>
-      <body className="bg-gray-50">
+      <body className={`bg-gray-50 ${season}`}>
         <Header />
 
         <div className="flex" style={{ height: "calc(100dvh - 90px)" }}>

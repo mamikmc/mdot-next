@@ -15,8 +15,7 @@ export default function MStarLogo({
     variant === "mono" ? "fill-current" : "fill-neutral-900 dark:fill-white";
 
   const starColor =
-    variant === "mono" ? "fill-current" : "fill-rose-400 dark:fill-rose-300";
-
+    variant === "mono" ? "fill-current" : "fill-star dark:fill-rose-300";
   return (
     <svg
       viewBox="-10 -10 360 160"
