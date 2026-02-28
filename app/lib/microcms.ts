@@ -21,6 +21,7 @@ export type Post = {
   category?: string[];
   eyecatch?: MicroCMSImage;
   images?: MicroCMSImage[];
+  calendar?: CalendarData[]; // calendarを追加
 };
 
 export async function getPostDetail(id: string): Promise<Post> {
@@ -51,7 +52,7 @@ export type InstagramPost = {
   id: string;
   image: MicroCMSImage;
   url: string;
-  title?: string; // 追加
+  title?: string;
 };
 
 export async function getInstagramPosts(): Promise<InstagramPost[]> {
@@ -61,11 +62,12 @@ export async function getInstagramPosts(): Promise<InstagramPost[]> {
   });
   return data.contents;
 }
+
 export type CalendarData = {
   id: string;
   year: number;
   month: number;
-  businessDays: string; // "1,3,7,10,14" のようなカンマ区切り
+  businessDays: string;
 };
 
 export async function getCalendar(
@@ -82,13 +84,3 @@ export async function getCalendar(
     return null;
   }
 }
-export type Post = {
-  id: string;
-  title: string;
-  date: string;
-  content: string;
-  category?: string[];
-  eyecatch?: MicroCMSImage;
-  images?: MicroCMSImage[];
-  calendar?: CalendarData[]; // 追加
-};
