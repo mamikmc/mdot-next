@@ -41,13 +41,11 @@ export default async function ArchiveDetailPage({ params }: Props) {
       <h1 className="text-3xl font-bold mb-8 text-gray-900">{post.title}</h1>
       <div
         className="prose prose-gray max-w-none
-    [&_img]:rounded-lg
-    [&_img]:max-w-xs
-    [&_img]:float-left
-    [&_img]:mr-6
-    [&_img]:mb-4
-    [&_img]:clear-left
-    [&_p]:clear-none"
+[&_img]:rounded-lg
+[&_img]:max-w-xs
+[&_img]:mx-auto
+[&_img]:block
+[&_img]:mb-4"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
       <div className="clear-both" />
