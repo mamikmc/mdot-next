@@ -5,14 +5,14 @@ export const client = createClient({
   apiKey: process.env.MICROCMS_API_KEY || "",
 });
 
-// 画像型（追加）
+// 画像型
 export type MicroCMSImage = {
   url: string;
   width: number;
   height: number;
 };
 
-// Post型（eyecatch・images を追加、元の定義を置き換え）
+// Post型
 export type Post = {
   id: string;
   title: string;
@@ -30,24 +30,7 @@ export async function getPostDetail(id: string): Promise<Post> {
   });
 }
 
-export const CATEGORIES = [
-  "event",
-  "interior",
-  "garden",
-  "cafe",
-  "bakery",
-  "food",
-  "camera",
-  "music",
-  "handmade",
-  "pet",
-  "shop",
-  "news",
-] as const;
-
-export type Category = (typeof CATEGORIES)[number];
-
-// Archiveはそのまま
+// Archive型
 export type Archive = {
   id: string;
   title: string;
@@ -61,4 +44,20 @@ export async function getArchiveDetail(id: string): Promise<Archive> {
     endpoint: "archives",
     contentId: id,
   });
+}
+
+// Instagram型
+export type InstagramPost = {
+  id: string;
+  image: MicroCMSImage;
+  url: string;
+  title?: string; // 追加
+};
+
+export async function getInstagramPosts(): Promise<InstagramPost[]> {
+  const data = await client.getList<InstagramPost>({
+    endpoint: "instagram",
+    queries: { limit: 20 },
+  });
+  return data.contents;
 }
