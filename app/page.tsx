@@ -10,11 +10,13 @@ const PER_PAGE = 10;
 
 // HTMLからテキストだけ抽出
 function stripHtml(html: string): string {
+  if (!html) return "";
   return html.replace(/<[^>]*>/g, "");
 }
 
 // HTMLから最初の画像URLを抽出
 function extractFirstImage(html: string): string | null {
+  if (!html) return null;
   const match = html.match(/<img[^>]+src="([^"]+)"/);
   return match ? match[1] : null;
 }
