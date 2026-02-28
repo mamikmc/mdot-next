@@ -21,7 +21,7 @@ body {
 
   /* 斜めドット */
   .bg-pattern-diagonal-dots {
-    background-color: rgb(248 248 248 / 0.8); /* ← /0.8 で半透明 */
+    background-color: rgb(248 248 248 / 0.8);
     overflow: hidden;
   }
   .bg-pattern-diagonal-dots::before {
@@ -30,9 +30,10 @@ body {
     inset: -500px;
     background-image: radial-gradient(circle, #c8c8c8 1px, transparent 1px);
     background-size: 14px 14px;
-    background-color: rgb(248 248 248 / 0.3); /* ← こちらも同様に */
+    background-color: rgb(248 248 248 / 0.3);
     transform: rotate(45deg);
     z-index: 0;
+    pointer-events: none;
   }
 
   /* 通常ドット */
