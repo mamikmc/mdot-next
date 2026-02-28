@@ -24,8 +24,8 @@ export default function Navigation({
   const navItems = items || [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
-    { href: "/category/concert", label: "Concerts" },
-    { href: "/category/handmade", label: "Handmade" },
+    // { href: "/category/concert", label: "Concerts" },
+    // { href: "/category/handmade", label: "Handmade" },
   ];
 
   return (

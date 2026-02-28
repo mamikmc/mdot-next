@@ -1,9 +1,25 @@
-export default function About() {
+// app/about/page.tsx
+import { getAllPosts } from "@/app/lib/microcms";
+import PhotoScatterCanvas from "@/app/components/PhotoScatterCanvas";
+
+export default async function AboutPage() {
+  const posts = await getAllPosts();
+
   return (
-    <div className="max-w-3xl mx-auto px-6 py-12">
-      <h1 className="text-4xl font-bold mb-6">このサイトについて</h1>
-      <p className="text-lg mb-4">Next.jsとTailwind CSSの練習用サイトです。</p>
-      <p className="text-lg">将来的にはオーケストラのサイトを作る予定です！</p>
-    </div>
+    <main>
+      <section style={{ padding: "60px 24px 40px", textAlign: "center" }}>
+        <h1
+          id="welcome-heading"
+          className="text-4xl font-black mb-4
+          bg-gradient-to-r from-rose-800 to-sky-500
+          bg-clip-text text-transparent"
+        >
+          What we are!
+        </h1>
+        <p>これまでの記録。</p>
+      </section>
+
+      <PhotoScatterCanvas posts={posts} />
+    </main>
   );
 }
