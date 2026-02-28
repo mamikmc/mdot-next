@@ -84,3 +84,24 @@ export async function getCalendar(
     return null;
   }
 }
+export async function getAllPosts(): Promise<Post[]> {
+  const limit = 100;
+  let offset = 0;
+  let allPosts: Post[] = [];
+
+  while (true) {
+    const res = await client.get<{ contents: Post[]; totalCount: number }>({
+      endpoint: "posts",
+      queries: {
+        fields: "id,title,eyecatch",
+        limit,
+        offset,
+      },
+    });
+    allPosts = [...allPosts, ...res.contents];
+    if (allPosts.length >= res.totalCount) break;
+    offset += limit;
+  }
+
+  return allPosts;
+}
