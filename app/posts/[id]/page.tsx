@@ -3,6 +3,7 @@ import Image from "next/image"; // ← 追加
 import { getPostDetail } from "@/app/lib/microcms";
 import RichText from "@/app/components/RichText";
 import { CategoryTag, CategoryTagList } from "@/app/components/CategoryTag";
+import Calendar from "@/app/components/Calendar";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -78,6 +79,20 @@ export default async function PostDetailPage({ params }: Props) {
                 className="w-full h-auto"
               />
             </div>
+          ))}
+        </div>
+      )}
+
+      {/* 営業日カレンダー */}
+      {post.calendar && post.calendar.length > 0 && (
+        <div className="flex flex-col gap-4 my-6">
+          {post.calendar.map((cal) => (
+            <Calendar
+              key={cal.id}
+              year={cal.year}
+              month={cal.month}
+              size="lg"
+            />
           ))}
         </div>
       )}
