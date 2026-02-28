@@ -1,13 +1,47 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@theme {
+  --color-brand: #e8829a;
+  --color-primary: #e8829a;
+  --color-accent: #e8829a;
+  --color-footer-bg: #f43f5e;
+  --color-dot: #c8c8c8;
+}
+
+@layer base {
+  .theme-mimosa {
+    --color-primary: #f2d060;
+    --color-accent: #e8a800;
+    --color-footer-bg: #b8d8da;
+    --color-dot: #e8c840;
+  }
+  .theme-sakura {
+    --color-primary: #ffb7c5;
+    --color-accent: #e8829a;
+    --color-footer-bg: #f9d0da;
+    --color-dot: #f4a0b8;
+  }
+  .theme-hanamizuki {
+    --color-primary: #f8f0f0;
+    --color-accent: #d4849a;
+    --color-footer-bg: #e8d4d8;
+    --color-dot: #d4a0a8;
+  }
+  .theme-default {
+    --color-primary: #e8829a;
+    --color-accent: #e8829a;
+    --color-footer-bg: #f43f5e;
+    --color-dot: #c8c8c8;
+  }
+}
+
 body {
   font-family: var(--font-zenkaku), -apple-system, BlinkMacSystemFont,
     sans-serif;
 }
 
 @layer utilities {
-  /* 斜めストライプ（現在のヘッダー） */
   .bg-pattern-stripes {
     background-image: repeating-linear-gradient(
       -45deg,
@@ -19,30 +53,32 @@ body {
     background-color: rgb(255 241 242 / 0.8);
   }
 
-  /* 斜めドット */
   .bg-pattern-diagonal-dots {
-    background-color: rgb(248 248 248 / 0.8);
+    background-color: rgb(255 255 255 / 0.45);
     overflow: hidden;
   }
   .bg-pattern-diagonal-dots::before {
     content: "";
     position: absolute;
     inset: -500px;
-    background-image: radial-gradient(circle, #c8c8c8 1px, transparent 1px);
+    background-image: radial-gradient(
+      circle,
+      var(--color-dot) 1px,
+      transparent 1px
+    );
     background-size: 14px 14px;
-    background-color: rgb(248 248 248 / 0.3);
+    background-color: transparent;
     transform: rotate(45deg);
     z-index: 0;
     pointer-events: none;
   }
 
-  /* 通常ドット */
   .bg-pattern-dots {
     background-color: #f8f8f8;
     background-image: radial-gradient(circle, #c8c8c8 1px, transparent 1px);
     background-size: 14px 14px;
   }
-  /* ドット（白・薄め） */
+
   .bg-pattern-dots-white {
     position: relative;
     overflow: hidden;
@@ -60,5 +96,13 @@ body {
     background-color: transparent;
     transform: rotate(45deg);
     z-index: 0;
+  }
+
+  .bg-footer {
+    background-color: var(--color-footer-bg);
+  }
+
+  .fill-star {
+    fill: var(--color-primary);
   }
 }

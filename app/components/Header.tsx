@@ -22,7 +22,7 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b border-neutral-200 text-gray-600 body-font backdrop-blur relative ${designConfig.header.pattern}`}
+      className={`sticky top-0 z-50 border-b border-neutral-200 text-gray-600 body-font backdrop-blur-md relative ${designConfig.header.pattern}`}
     >
       <div className="container mx-auto flex items-center justify-between p-5 relative z-10">
         {/* ロゴ（トップへ） */}
