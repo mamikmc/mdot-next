@@ -7,6 +7,7 @@ import Link from "next/link";
 export type ScatterPost = {
   id: string;
   title: string;
+  endpoint?: "posts" | "archives"; // リンク先の振り分けに使う
   eyecatch?: {
     url: string;
     width: number;
@@ -49,23 +50,30 @@ function generatePhotoItems(
   posts: ScatterPost[],
   canvasWidth: number
 ): PhotoItem[] {
-  const CANVAS_HEIGHT_PER_POST = 260;
-  const MARGIN = 40;
+  const MARGIN = 20;
+  const COLS = Math.floor(canvasWidth / 180); // 列数を画面幅から計算
+  const COL_WIDTH = canvasWidth / COLS;
+  const colHeights = new Array(COLS).fill(0); // 各列の現在の高さ
 
   return posts.map((post, i) => {
     const r = (offset: number) => seededRandom(i * 7 + offset);
 
-    const size = 120 + r(1) * 160; // 120〜280px
-    const maxLeft = Math.max(canvasWidth - size - MARGIN, MARGIN);
-    const left = MARGIN + r(2) * maxLeft;
-    const top = i * CANVAS_HEIGHT_PER_POST + r(3) * 180 - 90;
-    const rotate = (r(4) - 0.5) * 40; // -20〜+20deg
-    const delay = i * 80 + r(5) * 60;
+    const size = 100 + r(1) * 200; // 100〜300px（差を大きく）
+
+    // 一番低い列に配置
+    const colIndex = colHeights.indexOf(Math.min(...colHeights));
+    const left = colIndex * COL_WIDTH + r(2) * (COL_WIDTH - size - MARGIN);
+    const top = colHeights[colIndex] + r(3) * 40; // 少しずらす
+    const rotate = (r(4) - 0.5) * 50; // -25〜+25deg（回転も大きく）
+    const delay = i * 60 + r(5) * 40;
+
+    // 列の高さを更新
+    colHeights[colIndex] = top + size + MARGIN + r(6) * 60;
 
     return {
       post,
-      left,
-      top: Math.max(top, 20),
+      left: Math.max(MARGIN, left),
+      top: Math.max(10, top),
       rotate,
       size,
       delay,
@@ -226,10 +234,11 @@ function PhotoCard({
   const { post, left, top, rotate, size, delay } = item;
   const hasImage = !!post.eyecatch?.url;
   const bgColor = getCardColor(post.id);
+  const href = `/${post.endpoint ?? "posts"}/${post.id}`;
 
   return (
     <Link
-      href={`/posts/${post.id}`}
+      href={href}
       className={`scatter-card${visible ? " visible" : ""}`}
       style={
         {
