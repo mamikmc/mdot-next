@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import { Zen_Kaku_Gothic_New } from "next/font/google";
+import { Zen_Kaku_Gothic_New, Zen_Kurenaido } from "next/font/google";
 import { CATEGORIES } from "@/app/lib/categories";
 import { CategoryTag } from "@/app/components/CategoryTag";
 import Calendar from "@/app/components/Calendar";
@@ -14,6 +14,13 @@ const zenKaku = Zen_Kaku_Gothic_New({
   weight: ["400", "500", "700"],
   subsets: ["latin"],
   variable: "--font-zenkaku",
+  display: "swap",
+});
+
+const zenKurenaido = Zen_Kurenaido({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-kurenaido",
   display: "swap",
 });
 
@@ -54,7 +61,7 @@ export default async function RootLayout({
   const instagramPosts = await getInstagramPosts();
   const season = getSeasonTheme();
   return (
-    <html lang="ja" className={zenKaku.variable}>
+    <html lang="ja" className={`${zenKaku.variable} ${zenKurenaido.variable}`}>
       <body className={`bg-gray-50 ${season}`}>
         <Header />
 

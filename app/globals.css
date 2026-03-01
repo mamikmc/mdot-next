@@ -106,3 +106,8 @@ body {
     fill: var(--color-primary);
   }
 }
+@layer base {
+  .font-kurenaido {
+    font-family: var(--font-kurenaido), cursive;
+  }
+}
