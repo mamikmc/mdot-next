@@ -18,8 +18,32 @@ const zenKaku = Zen_Kaku_Gothic_New({
 });
 
 export const metadata: Metadata = {
-  title: "練習用サイト",
-  description: "Next.jsの学習用",
+  title: {
+    default: "mdot | 好きなものと日々の記録",
+    template: "%s | mdot",
+  },
+  description:
+    "インテリア、ガーデニング、カフェ、手作り、写真など。日常の好きなものをゆるく記録するブログです。",
+  authors: [{ name: "mami" }],
+  openGraph: {
+    title: "mdot | 好きなものと日々の記録",
+    description:
+      "インテリア、ガーデニング、カフェ、手作り、写真など。日常の好きなものをゆるく記録するブログです。",
+    url: "https://あなたのドメイン.com",
+    siteName: "mdot",
+    locale: "ja_JP",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "mdot | 好きなものと日々の記録",
+    description:
+      "インテリア、ガーデニング、カフェ、手作り、写真など。日常の好きなものをゆるく記録するブログです。",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default async function RootLayout({

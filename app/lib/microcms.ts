@@ -1,4 +1,5 @@
 import { createClient } from "microcms-js-sdk";
+import type { ScatterPost } from "@/app/components/PhotoScatterCanvas";
 
 export const client = createClient({
   serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN || "",
@@ -104,4 +105,43 @@ export async function getAllPosts(): Promise<Post[]> {
   }
 
   return allPosts;
+}
+export async function getAboutPosts(): Promise<Post[]> {
+  const res = await client.get<{ contents: Post[]; totalCount: number }>({
+    endpoint: "posts",
+    queries: {
+      filters: "isAbout[equals]true",
+      fields: "id,title,eyecatch",
+      limit: 100,
+    },
+  });
+  return res.contents;
+}
+function extractFirstImageUrl(html: string): string | undefined {
+  const match = html.match(/<img[^>]+src="([^"]+)"/);
+  return match?.[1];
+}
+
+export async function getAboutArchives(): Promise<ScatterPost[]> {
+  const res = await client.get<{ contents: Archive[]; totalCount: number }>({
+    endpoint: "archives",
+    queries: {
+      filters: "isAbout[equals]true",
+      fields: "id,title,content",
+      limit: 100,
+    },
+  });
+
+  return res.contents.map((archive) => ({
+    id: archive.id,
+    title: archive.title,
+    endpoint: "archives" as const,
+    eyecatch: extractFirstImageUrl(archive.content)
+      ? {
+          url: extractFirstImageUrl(archive.content)!,
+          width: 400,
+          height: 400,
+        }
+      : undefined,
+  }));
 }

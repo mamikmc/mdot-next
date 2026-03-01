@@ -1,9 +1,13 @@
 // app/about/page.tsx
-import { getAllPosts } from "@/app/lib/microcms";
+import { getAboutPosts, getAboutArchives } from "@/app/lib/microcms";
 import PhotoScatterCanvas from "@/app/components/PhotoScatterCanvas";
 
 export default async function AboutPage() {
-  const posts = await getAllPosts();
+  const [posts, archives] = await Promise.all([
+    getAboutPosts(),
+    getAboutArchives(),
+  ]);
+  const items = [...posts, ...archives];
 
   return (
     <main>
@@ -19,7 +23,7 @@ export default async function AboutPage() {
         <p>これまでの記録。</p>
       </section>
 
-      <PhotoScatterCanvas posts={posts} />
+      <PhotoScatterCanvas posts={items} />
     </main>
   );
 }

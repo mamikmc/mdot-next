@@ -11,9 +11,13 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.microcms-assets.io",
       },
+      {
+        protocol: "https",
+        hostname: "mdot.jp",
+      },
     ],
     formats: ["image/avif", "image/webp"],
-    qualities: [75, 80], // ← 追加
+    qualities: [75, 80],
   },
 };
 
