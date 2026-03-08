@@ -8,7 +8,6 @@ const PER_PAGE = 10;
 function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "");
 }
-
 function extractFirstImage(html: string): string | null {
   const match = html.match(/<img[^>]+src="([^"]+)"/);
   return match ? match[1] : null;
@@ -56,12 +55,12 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const totalPages = Math.ceil(totalCount / PER_PAGE);
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-12">
+    <div className="max-w-6xl mx-auto px-6 py-12">
       <h1 className="text-3xl font-bold mb-6 text-gray-900">
         {categoryLabels[category] ?? category}
       </h1>
 
-      <div className="grid gap-6 mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         {posts.length === 0 && (
           <p className="text-gray-500">記事がありません。</p>
         )}
@@ -71,7 +70,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
               title={post.title}
               date={post.date}
               description={stripHtml(post.content).slice(0, 80) + "…"}
-              thumbnail={extractFirstImage(post.content)}
+              thumbnail={post.eyecatch?.url ?? extractFirstImage(post.content)}
             />
           </Link>
         ))}
