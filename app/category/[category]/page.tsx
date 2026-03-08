@@ -3,7 +3,7 @@ import Card from "@/app/components/Card";
 import { client, Post } from "@/app/lib/microcms";
 import Pagination from "@/app/components/Pagination";
 
-const PER_PAGE = 10;
+const PER_PAGE = 12;
 
 function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "");

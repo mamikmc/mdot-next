@@ -7,7 +7,7 @@ import FeaturedPost from "./components/FeaturedPost";
 
 export const revalidate = 0;
 
-const PER_PAGE = 10;
+const PER_PAGE = 12;
 
 // HTMLからテキストだけ抽出
 function stripHtml(html: string): string {
