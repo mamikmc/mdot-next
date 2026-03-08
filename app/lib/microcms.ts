@@ -23,6 +23,7 @@ export type Post = {
   eyecatch?: MicroCMSImage;
   images?: MicroCMSImage[];
   calendar?: CalendarData[]; // calendarを追加
+  isFeatured?: boolean; // ← 追加
 };
 
 export async function getPostDetail(id: string): Promise<Post> {

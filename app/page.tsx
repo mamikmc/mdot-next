@@ -3,6 +3,7 @@ import Card from "./components/Card";
 import { client, Post, Archive } from "./lib/microcms";
 import { HomeIcon } from "@heroicons/react/24/solid";
 import Pagination from "./components/Pagination";
+import FeaturedPost from "./components/FeaturedPost";
 
 export const revalidate = 0;
 
@@ -68,6 +69,15 @@ export default async function Home({ searchParams }: Props) {
     fetchAll("posts"),
     fetchAll("archives"),
   ]);
+  const featuredData = await client.get({
+    endpoint: "posts",
+    queries: {
+      filters: "isFeatured[equals]true",
+      limit: 1,
+      orders: "-date",
+    },
+  });
+  const featuredPost: Post | null = featuredData.contents[0] ?? null;
 
   // マージして日付順にソート
   const allPosts: UnifiedPost[] = [
@@ -84,7 +94,7 @@ export default async function Home({ searchParams }: Props) {
   const postsList = allPosts.slice(offset, offset + PER_PAGE);
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-12">
+    <div className="max-w-6xl mx-auto px-6 py-12">
       <section aria-labelledby="welcome-heading">
         <h1
           id="welcome-heading"
@@ -97,14 +107,15 @@ export default async function Home({ searchParams }: Props) {
       </section>
 
       <section aria-labelledby="posts-heading">
+        {featuredPost && <FeaturedPost post={featuredPost} />}
         <h2
           id="posts-heading"
           className="text-3xl font-bold mb-6 text-gray-900"
         >
           お知らせ
         </h2>
-        <div className="grid gap-6 mb-12">
-          {postsList.map((post) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {postsList.map((post, index) => (
             <Link
               key={`${post.type}-${post.id}`}
               href={
@@ -118,8 +129,9 @@ export default async function Home({ searchParams }: Props) {
                 date={post.date}
                 description={stripHtml(post.content).slice(0, 80) + "…"}
                 thumbnail={
-                  post.eyecatch?.url ?? extractFirstImage(post.content) // ← 変更
+                  post.eyecatch?.url ?? extractFirstImage(post.content)
                 }
+                priority={index === 0}
               />
             </Link>
           ))}
