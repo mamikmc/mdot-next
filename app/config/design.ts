@@ -7,7 +7,7 @@ export const designConfig = {
     // "bg-pattern-stripes"
   },
   footer: {
-    bg: "bg-rose-400",
+    bg: "bg-footer", // ← カスタムクラスに変更
     pattern: "bg-pattern-dots-white", // ← 追加
   },
 } as const;

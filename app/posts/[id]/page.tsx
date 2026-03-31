@@ -1,6 +1,9 @@
 import Link from "next/link";
+import Image from "next/image"; // ← 追加
 import { getPostDetail } from "@/app/lib/microcms";
 import RichText from "@/app/components/RichText";
+import { CategoryTag, CategoryTagList } from "@/app/components/CategoryTag";
+import Calendar from "@/app/components/Calendar";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -9,6 +12,8 @@ type Props = {
 export default async function PostDetailPage({ params }: Props) {
   const { id } = await params;
   const post = await getPostDetail(id);
+
+  console.log("post data:", JSON.stringify(post, null, 2)); // ← 追加
 
   const formattedDate = new Date(post.date).toLocaleDateString("ja-JP", {
     year: "numeric",
@@ -27,8 +32,70 @@ export default async function PostDetailPage({ params }: Props) {
       <time className="text-sm text-gray-500 font-medium block mb-3">
         {formattedDate}
       </time>
+
+      {post.category && post.category.length > 0 && (
+        <div className="mb-4">
+          <CategoryTagList
+            tags={post.category.map((cat) => ({
+              label: cat,
+              href: `/category/${cat}`,
+            }))}
+          />
+        </div>
+      )}
+
       <h1 className="text-3xl font-bold mb-8 text-gray-900">{post.title}</h1>
+
+      {/* アイキャッチ画像 */}
+      {post.eyecatch && (
+        <div className="mb-8 rounded-xl overflow-hidden">
+          <Image
+            src={post.eyecatch.url}
+            width={post.eyecatch.width}
+            height={post.eyecatch.height}
+            alt={post.title}
+            sizes="(max-width: 768px) 100vw, 768px"
+            quality={80}
+            priority // 最初に見える画像なのでpriority
+            className="w-full h-auto"
+          />
+        </div>
+      )}
+
       <RichText content={post.content} />
+
+      {/* 複数画像ギャラリー */}
+      {post.images && post.images.length > 0 && (
+        <div className="mt-12 grid grid-cols-2 gap-4">
+          {post.images.map((image, index) => (
+            <div key={index} className="rounded-xl overflow-hidden">
+              <Image
+                src={image.url}
+                width={image.width}
+                height={image.height}
+                alt={`${post.title} - 画像${index + 1}`}
+                sizes="(max-width: 768px) 50vw, 384px"
+                quality={80}
+                className="w-full h-auto"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 営業日カレンダー */}
+      {post.calendar && post.calendar.length > 0 && (
+        <div className="flex flex-col gap-4 my-6">
+          {post.calendar.map((cal) => (
+            <Calendar
+              key={cal.id}
+              year={cal.year}
+              month={cal.month}
+              size="lg"
+            />
+          ))}
+        </div>
+      )}
     </article>
   );
 }
